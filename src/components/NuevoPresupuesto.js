@@ -1,7 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import  {Text, View, TextInput, Pressable, StyleSheet} from 'react-native'
 
 import  globalStyles from '../styles' //importacion de estilos
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NuevoPresupuesto = ({
     handleNuevoPresupuesto, 
@@ -9,7 +11,27 @@ const NuevoPresupuesto = ({
     setPresupuesto
 }) => {
   
+/*
+ Ejemplo de uso de AsynStorage
+  useEffect(() => 
+  {
+    const obtenerAS = async () => //se declara una funcion asincrona ya que no sabemos con certeza cuando obtendra los datos
+    {
+       try {
+         const valor = await AsyncStorage.getItem('prueba_as')
+         console.log(JSON.parse(valor))
+       } 
+       catch (error) //solo mostrara errores de AsyncStorage como un metodo mal escrito, etc
+       {
+          console.log(error)
+       }
+    }
+    
+    obtenerAS()
 
+  }, [])
+
+  */
   return (
     <View style={styles.contenedor}>
       <Text style={styles.label}>

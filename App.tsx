@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -11,6 +11,7 @@ import {
   Image,
   Modal
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -24,6 +25,21 @@ import FormularioGasto from './src/components/FormularioGasto';
 import {generarId} from './src/helpers/index.js'
 import ListadoGastos from './src/components/ListadoGastos';
 import Filtro from './src/components/Filtro';
+
+/* Async Storage
+  Sistema de almacenamiento de tipo llave valor (key-value) que existe y se puede acceder de forma global
+  en la App
+
+  Similar a LocalStorage (WEB)
+
+  En IOS utiliza Diccionarios o archivos, mientras que en Android utiliza SQLite o RocksDB (lo que haya disponible)
+
+  //Metodos
+  .setItem => Nos permite almacenar elementos
+  .getItem => Nos permite obtener elementos
+  .removeItem => Nos permite elminar un elemento
+  .clear => Limpia todo el contenido
+*/
 
 function App(): JSX.Element 
 {
@@ -39,6 +55,106 @@ function App(): JSX.Element
 
   //States Modales
   const [modal, setModal] = useState(false)
+
+  /*
+  Ejemplo de uso de AsynStorage
+  useEffect(()=> {  //no se le pasa nada ya que al cargar el componente se iniciara
+     const almacenarAS = async () =>  //funcion asincrona
+     {
+        const nombre = [1,1,2]
+        await AsyncStorage.setItem('prueba_as', JSON.stringify(nombre)) //almacenamiento de llave valor
+        console.log('almacenado')
+     }
+
+     almacenarAS()
+  },[])
+  */
+  //El orden en el que se ordenan los effects con en los que se ejecutan
+//USEEFFECTS
+  useEffect(()=> {
+     const obtenerPresupuestoStorage =async () => 
+     {
+       try 
+       {
+         //Preguntamos si existe la una variable o si es diferente de null si es alguna de estas 
+         //deja en 0 el valor de la constante
+         const presupuestoStorage = await AsyncStorage.getItem('planificador_presupuesto') ?? 0
+
+         //Nos aseguramos de que el presupuesto de Storage que se haya guardado y cargado sea 
+         //diferente de 0
+         if(presupuestoStorage > 0)
+         {
+            setPresupuesto(presupuestoStorage)
+            setIsValidPresupuesto(true)
+         }
+
+       } catch (error)
+       {
+         console.log(error) 
+       }
+     }
+  },[])  //se le pasa arreglo vacio porque se quiere ejecutar 1 vez
+
+  //Almacenamiento en AsyncStorage, almacenamiento de PRESUPUESTO VALIDO
+  useEffect(() => {  //el useEffect se ejecuta una vez cuando se monta el componente y cuando cambia la variable que escucha, por tanto hay que condicionar
+    if(isValidPresupuesto)
+    {
+       const guardarPresupuestoStorage = async () => 
+       {
+          try 
+          {
+            await AsyncStorage.setItem('planificador_presupuesto', presupuesto)
+          } 
+          catch (error)
+          {
+            console.log(error)
+          }
+       }
+
+       guardarPresupuestoStorage()
+    }
+  },[isValidPresupuesto]) //solo cuando el presupuesto sea valido  se almacenara 
+
+  //UseEffect para guardado de gastos en Storage
+  useEffect(()=>
+  {
+     const guardarGastosStorage = async () => 
+     {
+        try
+        {
+          await AsyncStorage.setItem('planificador_gastos', JSON.stringify(gastos)) 
+        } 
+        catch (error)
+        {
+          console.log(error)
+        }
+     }
+
+     guardarGastosStorage()
+  },[gastos]) //cada que gastos este cambiando va a estar escribiendo en Storage
+
+  //UseEffect para seteo de gastos
+  useEffect(() => 
+  { 
+    const  obtenerGastosStorage =async () => 
+    {
+      try 
+      {
+        //sino existen gastos en el storage pone un arreglo vacio
+        const gastosStorage = await AsyncStorage.getItem('planificador_gastos')
+        //comprobamos que no 
+        setGastos(gastosStorage ? JSON.parse(gastosStorage)) 
+      } 
+      catch (error) 
+      {
+        console.log(error)
+      }
+    }
+
+    obtenerGastosStorage()
+  },[]) //solo queremos que se ejecute 1 vez
+
+//FIN USEEFFECTS
 
   const handleNuevoPresupuesto = (presupuesto) => 
    {
