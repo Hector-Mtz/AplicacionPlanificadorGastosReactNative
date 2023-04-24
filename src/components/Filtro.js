@@ -20,7 +20,7 @@ const Filtro = (
         }
         else
         {
-           const gastosFiltrados = gastos.filter(gasto => gastos.categoria === filtro) //tomara los gastos que tengan esa categoria del filtro
+           const gastosFiltrados = gastos.filter(gasto => gasto.categoria === filtro) //tomara los gastos que tengan esa categoria del filtro
 
            setGastosFiltrados(gastosFiltrados)
         }

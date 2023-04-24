@@ -70,31 +70,37 @@ function App(): JSX.Element
   },[])
   */
   //El orden en el que se ordenan los effects con en los que se ejecutan
-//USEEFFECTS
+  //USEEFFECTS
   useEffect(()=> {
-     const obtenerPresupuestoStorage =async () => 
-     {
-       try 
-       {
-         //Preguntamos si existe la una variable o si es diferente de null si es alguna de estas 
-         //deja en 0 el valor de la constante
-         const presupuestoStorage = await AsyncStorage.getItem('planificador_presupuesto') ?? 0
+    const obtenerPresupuestoStorage = async () => 
+    {
+      try 
+      {
+        //Preguntamos si existe la una variable o si es diferente de null si es alguna de estas 
+        //deja en 0 el valor de la constante
+        const presupuestoStorage = await AsyncStorage.getItem('planificador_presupuesto') ?? 0
+        //console.log(presupuestoStorage)
+        //Nos aseguramos de que el presupuesto de Storage que se haya guardado y cargado sea 
+        //diferente de 0
+        if(presupuestoStorage > 0)
+        {
+           setPresupuesto(presupuestoStorage)
+           setIsValidPresupuesto(true)
+           
+        }
 
-         //Nos aseguramos de que el presupuesto de Storage que se haya guardado y cargado sea 
-         //diferente de 0
-         if(presupuestoStorage > 0)
-         {
-            setPresupuesto(presupuestoStorage)
-            setIsValidPresupuesto(true)
-         }
+        console.log(JSON.parse(presupuestoStorage))
 
-       } catch (error)
-       {
-         console.log(error) 
-       }
-     }
-  },[])  //se le pasa arreglo vacio porque se quiere ejecutar 1 vez
+      } catch (error)
+      {
+        console.log(error) 
+      }
+    }
 
+    obtenerPresupuestoStorage()
+ },[])  //se le pasa arreglo vacio porque se quiere ejecutar 1 vez
+
+ 
   //Almacenamiento en AsyncStorage, almacenamiento de PRESUPUESTO VALIDO
   useEffect(() => {  //el useEffect se ejecuta una vez cuando se monta el componente y cuando cambia la variable que escucha, por tanto hay que condicionar
     if(isValidPresupuesto)
@@ -115,6 +121,31 @@ function App(): JSX.Element
     }
   },[isValidPresupuesto]) //solo cuando el presupuesto sea valido  se almacenara 
 
+
+    //UseEffect para seteo de gastos
+    useEffect(() => 
+    { 
+      const  obtenerGastosStorage =async () => 
+      {
+        try 
+        {
+          //sino existen gastos en el storage pone un arreglo vacio
+          const gastosStorage = await AsyncStorage.getItem('planificador_gastos')
+          //comprobamos que no 
+          setGastos(gastosStorage ? JSON.parse(gastosStorage) : []) 
+  
+          
+        } 
+        catch (error) 
+        {
+          console.log(error)
+        }
+      }
+  
+      obtenerGastosStorage()
+    },[]) //solo queremos que se ejecute 1 vez
+  
+
   //UseEffect para guardado de gastos en Storage
   useEffect(()=>
   {
@@ -132,27 +163,6 @@ function App(): JSX.Element
 
      guardarGastosStorage()
   },[gastos]) //cada que gastos este cambiando va a estar escribiendo en Storage
-
-  //UseEffect para seteo de gastos
-  useEffect(() => 
-  { 
-    const  obtenerGastosStorage =async () => 
-    {
-      try 
-      {
-        //sino existen gastos en el storage pone un arreglo vacio
-        const gastosStorage = await AsyncStorage.getItem('planificador_gastos')
-        //comprobamos que no 
-        setGastos(gastosStorage ? JSON.parse(gastosStorage)) 
-      } 
-      catch (error) 
-      {
-        console.log(error)
-      }
-    }
-
-    obtenerGastosStorage()
-  },[]) //solo queremos que se ejecute 1 vez
 
 //FIN USEEFFECTS
 
@@ -212,6 +222,32 @@ function App(): JSX.Element
         }}
        ])
    }
+
+   const resetearApp = () => 
+   {
+      Alert.alert(
+      '¿Deseas Resetear La App?',
+      'Esto eliminara el presupuesto junto con los gastos', 
+      [
+        {text:'No', style:'cancel'},
+        {text:'Eliminar', onPress: async () =>
+        {
+          try 
+          {
+            await AsyncStorage.clear()
+
+            setIsValidPresupuesto(false)
+            setPresupuesto(0)
+            setGastos([])
+          } 
+          catch (error) 
+          {
+            console.log(error)
+          }
+        }}
+      ])
+   }
+
   return (
      <View style={styles.contenedor}>
       <ScrollView>
@@ -219,7 +255,7 @@ function App(): JSX.Element
         <Header />
          {isValidPresupuesto ? //validamos si hay presupuesto o no y definimos que componentes existe
            (
-             <ControlPresupuesto presupuesto={presupuesto} gastos={gastos} /> 
+             <ControlPresupuesto presupuesto={presupuesto} gastos={gastos} resetearApp={resetearApp} /> 
            ): 
            (
             <NuevoPresupuesto 

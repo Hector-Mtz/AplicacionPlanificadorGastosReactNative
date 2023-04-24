@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import {Text, View, Image, StyleSheet} from 'react-native'
+import {Text, View, Image, StyleSheet, Pressable, Alert} from 'react-native'
 import  globalStyles from '../styles'
 import { formatearCantidad } from '../helpers'
 import CircularProgress from 'react-native-circular-progress-indicator'
 
 const ControlPresupuesto = ({
     presupuesto,
-    gastos
+    gastos,
+    resetearApp
    }) =>
  {
 
@@ -35,6 +36,7 @@ const ControlPresupuesto = ({
 
       setDisponible(totalDisponible)
     },[gastos])  //cada que cambia el arreglo de gastos ejecuta el codigo dentro del useEffect
+
   return (
     <View style={styles.contenedor}>
         <View style={styles.centrarGrafica}>
@@ -53,6 +55,11 @@ const ControlPresupuesto = ({
            />
         </View>
         <View style={styles.contenedorTexto}>
+
+            <Pressable style={styles.boton} onPress={resetearApp}>
+               <Text style={styles.textoBoton}>Reiniciar App</Text>
+            </Pressable>
+
             <Text style={styles.valor}>
                 <Text style={styles.label}>Presupuesto Inicial:{' '}</Text>
                 {formatearCantidad(presupuesto)}
@@ -80,6 +87,19 @@ const styles = StyleSheet.create({
      imagen:{
         width:250,
         height:250
+     },
+     boton:{
+       backgroundColor:'#DB2777',
+       padding:10,
+       marginBottom:40,
+       borderRadius:5
+     },
+     textoBoton:
+     {
+       textAlign:'center',
+       color:'white',
+       fontWeight:'bold',
+       textTransform:'uppercase'
      },
      contenedorTexto:{
        marginTop:50,

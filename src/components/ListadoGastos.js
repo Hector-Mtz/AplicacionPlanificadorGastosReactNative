@@ -25,8 +25,8 @@ const ListadoGastos = ({
           ))
          }
 
-         {gastos.length === 0 || (gastosFiltrados.length == 0 && !!filtro /*gastos filtrados debe estar vacio pero tener un filtro aplicado*/ 
-         )  && (
+         {(gastos.length === 0  || (gastosFiltrados.length == 0 && !!filtro /*gastos filtrados debe estar vacio pero tener un filtro aplicado*/ 
+           )) && (
             <Text style = {styles.noGastos}>No Hay Gastos</Text>
          )}
     </View>
