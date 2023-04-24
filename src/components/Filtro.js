@@ -35,14 +35,14 @@ const Filtro = (
             setFiltro(valor)
           }}
         >
-           <Picker.Item label='-- SELECCIONE --' value="" />
-           <Picker.Item label='Ahorro' value="ahorro" />
-           <Picker.Item label='Comida' value="comida" />
-           <Picker.Item label='Casa' value="casa" />
-           <Picker.Item label='Gastos Varios' value="gasto" />
-           <Picker.Item label='Entrenenimiento' value="entretenimiento" />
-           <Picker.Item label='Salud' value="salud" />
-           <Picker.Item label='Sucripciones' value="suscripciones" />
+           <Picker.Item label='-- SELECCIONE --' value="" color='black'  />
+           <Picker.Item label='Ahorro' value="ahorro" color='black'  />
+           <Picker.Item label='Comida' value="comida" color='black'  />
+           <Picker.Item label='Casa' value="casa" color='black'  />
+           <Picker.Item label='Gastos Varios' value="gasto" color='black'  />
+           <Picker.Item label='Entrenenimiento' value="entretenimiento" color='black'  />
+           <Picker.Item label='Salud' value="salud" color='black'  />
+           <Picker.Item label='Sucripciones' value="suscripciones"  color='black' />
         </Picker>
      </View>
   )

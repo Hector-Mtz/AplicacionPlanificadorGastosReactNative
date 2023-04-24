@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     marginTop:20,
     textAlign:'center',
     fontSize:20,
-    marginVertical:20
+    marginVertical:20,
+    color:'black'
    }
 })
 

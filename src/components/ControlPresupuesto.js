@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
      valor:{
       fontSize:24,
       textAlign:'center',
-      marginBottom:10
+      marginBottom:10,
+      color:'black'
      },
      label:{
       fontWeight:'700',

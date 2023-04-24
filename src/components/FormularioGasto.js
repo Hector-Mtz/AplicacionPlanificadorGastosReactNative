@@ -58,11 +58,11 @@ const FormularioGasto = ({
 
             <View style={styles.campo}>
                 <Text style={styles.label}>Nombre Gasto</Text>
-                <TextInput style={styles.input} placeholder='Nombre del gasto. ej. Comida' value={nombre} onChangeText={setNombre} />
+                <TextInput style={styles.input} placeholderTextColor={'black'} placeholder='Nombre del gasto. ej. Comida' value={nombre} onChangeText={setNombre} />
             </View>
             <View style={styles.campo}>
                 <Text style={styles.label}>Cantidad Gasto</Text>
-                <TextInput style={styles.input} placeholder='Cantidad del gasto ej. 300' keyboardType='numeric' onChangeText={setCantidad} value={cantidad} />
+                <TextInput style={styles.input} placeholderTextColor={'black'} placeholder='Cantidad del gasto ej. 300' keyboardType='numeric' onChangeText={setCantidad} value={cantidad} />
             </View>
             <View style={styles.campo}>
                 <Text style={styles.label}>Categoria Gasto</Text>
